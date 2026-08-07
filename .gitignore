@@ -1,0 +1,21 @@
+# Build output
+build/
+cmake-build-*/
+out/
+
+# Object/binary files
+*.o
+*.a
+*.so
+*.exe
+
+# Editor / OS junk
+.vscode/
+.idea/
+.DS_Store
+*.swp
+
+# Vitis HLS artifacts (you'll need this later)
+*.log
+.project/
+.solution/
