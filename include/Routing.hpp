@@ -31,4 +31,4 @@ public:
                            std::vector<Route>& out);
 };
 
-} // namespace ufm
+} // namespace ufm2
