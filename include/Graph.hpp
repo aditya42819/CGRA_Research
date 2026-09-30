@@ -41,7 +41,6 @@ public:
     // cycles of ceil(total latency / total iteration distance), with unit
     // operation latency.
     int computeRecMII() const;
-
 private:
     std::vector<Instruction> instrs_;
     std::vector<Edge>        edges_;

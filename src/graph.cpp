@@ -52,44 +52,38 @@ std::vector<InstrId> DFG::topologicalSort() const {
 
 int DFG::computeRecMII() const {
     // [REASONABLE INFERENCE] The paper names RecurrentEdges() but omits the
-    // computation; we use Rau's definition: max over recurrence cycles of
-    // ceil(cycle latency / cycle distance), unit op latency.
+    // computation; use the standard maximum recurrence-cycle ratio. Enumerate
+    // each simple directed cycle once (starting at its smallest instruction
+    // id), so a DFS spanning-tree choice cannot hide another cycle.
     const int n = static_cast<int>(instrs_.size());
     std::vector<std::vector<const Edge*>> adj(n);
     for (const Edge& e : edges_) adj[e.src].push_back(&e);
 
     int recMII = 0;
-    std::vector<int> pos(n, -1);   // Position of node in current DFS path.
-    std::vector<int> path;         // Current DFS path (nodes).
-    std::vector<int> edgeInto;     // edgeInto[i] = distance of edge into path[i].
-
-    std::function<void(int)> dfs = [&](int u) {
-        pos[u] = static_cast<int>(path.size());
-        path.push_back(u);
-        for (const Edge* e : adj[u]) {
-            const int v = e->dst;
-            if (pos[v] >= 0) {
-                // Back-edge: cycle = path[pos[v] .. back] + (u -> v).
-                const int latency = static_cast<int>(path.size()) - pos[v];
-                int distance = e->distance;
-                for (std::size_t i = pos[v] + 1; i < path.size(); ++i)
-                    distance += edgeInto[i];
-                if (distance > 0)
-                    recMII = std::max(recMII, (latency + distance - 1) / distance);
-                // [REASONABLE INFERENCE] distance == 0 cycle would be a
-                // combinational loop; such DFGs are invalid and ignored here.
-            } else {
-                edgeInto.push_back(e->distance);
-                dfs(v);
-                edgeInto.pop_back();
-            }
-        }
-        path.pop_back();
-        pos[u] = -1;
-    };
-
-    for (int r = 0; r < n; ++r)
-        if (pos[r] < 0) dfs(r);
+    std::vector<bool> onPath(n, false);
+    for (int start = 0; start < n; ++start) {
+        onPath[start] = true;
+        std::function<void(int, int, long long)> enumerate =
+            [&](int u, int length, long long distance) {
+                for (const Edge* e : adj[u]) {
+                    const int v = e->dst;
+                    const long long cycleDistance = distance + e->distance;
+                    if (v == start) {
+                        if (cycleDistance > 0) {
+                            const long long ratio =
+                                (length + 1LL + cycleDistance - 1) / cycleDistance;
+                            recMII = std::max(recMII, static_cast<int>(ratio));
+                        }
+                    } else if (v > start && !onPath[v]) {
+                        onPath[v] = true;
+                        enumerate(v, length + 1, cycleDistance);
+                        onPath[v] = false;
+                    }
+                }
+            };
+        enumerate(start, 0, 0);
+        onPath[start] = false;
+    }
     return recMII;
 }
 
