@@ -1,0 +1,51 @@
+
+==== T1 4x4 memcol regression  (expect II = 1) ====
+Achieved II = 1  [PASS]
+Placements:
+  id 0 -> PE0  cycle 0  slot 0
+  id 1 -> PE2  cycle 1  slot 0
+  id 2 -> PE3  cycle 2  slot 0
+  id 3 -> PE7  cycle 3  slot 0
+  id 4 -> PE6  cycle 4  slot 0
+  id 5 -> PE5  cycle 5  slot 0
+  id 6 -> PE9  cycle 6  slot 0
+Routes:
+  src 0 @c%1=0 : PE0 PE1 PE2  (new links: 2)
+  src 0 @c%1=0 : PE2 PE3  (new links: 1)
+  src 0 @c%1=0 : PE3 PE7  (new links: 1)
+  src 1 @c%1=0 : PE2 PE6  (new links: 1)
+  src 2 @c%1=0 : PE3 PE2 PE1 PE5  (new links: 3)
+  src 3 @c%1=0 : PE7 PE6 PE5  (new links: 2)
+  src 4 @c%1=0 : PE6 PE10 PE9  (new links: 2)
+  src 5 @c%1=0 : PE5 PE9  (new links: 1)
+
+==== T2 2x2 paper Fig.3  (expect II = 2) ====
+Achieved II = 2  [PASS]
+Placements:
+  id 0 -> PE0  cycle 0  slot 0
+  id 1 -> PE0  cycle 1  slot 1
+  id 2 -> PE1  cycle 2  slot 0
+  id 3 -> PE1  cycle 3  slot 1
+  id 4 -> PE3  cycle 4  slot 0
+  id 5 -> PE3  cycle 5  slot 1
+  id 6 -> PE2  cycle 6  slot 0
+Routes:
+  src 0 @c%2=0 :  (new links: 0)
+  src 0 @c%2=0 : PE0 PE1  (new links: 1)
+  src 0 @c%2=0 :  (new links: 0)
+  src 1 @c%2=1 : PE0 PE2 PE3  (new links: 2)
+  src 2 @c%2=0 : PE1 PE3  (new links: 1)
+  src 3 @c%2=1 : PE1 PE3  (new links: 1)
+  src 4 @c%2=0 : PE3 PE2  (new links: 1)
+  src 5 @c%2=1 : PE3 PE2  (new links: 1)
+
+==== T3 recurrence RecMII=3  (expect II = 3) ====
+Achieved II = 3  [PASS]
+Placements:
+  id 0 -> PE1  cycle 0  slot 0
+  id 1 -> PE1  cycle 1  slot 1
+  id 2 -> PE1  cycle 2  slot 2
+Routes:
+  src 0 @c%3=0 :  (new links: 0)
+  src 1 @c%3=1 :  (new links: 0)
+  src 2 @c%3=2 :  (new links: 0)
